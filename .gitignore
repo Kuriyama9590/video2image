@@ -1,0 +1,15 @@
+# 密钥配置 - 不要提交
+.env
+
+# 运行产物
+out/
+downloads/
+test_video.mp4
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# ZCode 会话内部文件
+.zcode/
