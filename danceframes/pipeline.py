@@ -129,6 +129,12 @@ def run(video: Path, s: Settings) -> RunResult:
                           cols=min(4, max(1, len(candidates))))
     _log(f"  [5/6] LLM 全局精选 ({len(candidates)} 个候选 -> 选 {s.top}) ...")
     selection = global_select(client, grid_path, candidates, s.top)
+    for attempt in range(1, 3):  # 网络类瞬时失败 (如DNS抖动) 延迟重试
+        if selection.get("ok") or selection["selected"]:
+            break
+        _log(f"        调用失败, 15s 后重试 ({attempt}/2) ...")
+        time.sleep(15)
+        selection = global_select(client, grid_path, candidates, s.top)
     _log(f"        模型选择 {len(selection['selected'])} 帧: {selection['selected']}")
 
     if selection["selected"]:

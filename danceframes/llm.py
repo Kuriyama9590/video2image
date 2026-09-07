@@ -175,6 +175,7 @@ def global_select(client: ArkClient, grid: Path,
             if i in valid and i not in sel:
                 sel.append(i)
         return {"selected": sel[:top],
-                "rationale": str(d.get("rationale", ""))[:300]}
+                "rationale": str(d.get("rationale", ""))[:300], "ok": True}
     except (LLMError, KeyError, ValueError, TypeError) as e:
-        return {"selected": [], "rationale": f"全局精选调用失败, 回退按分数排序: {e}"}
+        return {"selected": [], "ok": False,
+                "rationale": f"全局精选调用失败: {e}"}
